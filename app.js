@@ -11,6 +11,8 @@ const logger = require('koa-logger')
  //const historyApiFallback = require('koa-history-api-fallback');
 const app = new Koa();
 
+
+const User =require('./src/server/models/user');
 app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
@@ -44,6 +46,28 @@ app.use(logger());
 
 router.get('/api/fuck', async (ctx) => {
     ctx.body = 'hello guru'
+    var user = new User({
+      name: 'lita',
+      password: 'lita',
+      email: 'lita@gmail.com',
+      gender: 'M',
+      signature: 'cool',
+      personalWeb: 'litacheng.me',
+      GitHub: 'loveppears',
+      avatarUrl: 
+          'http://res.cloudinary.com/hezf/image/upload/v1467186691/vwuj8a3tpuqoy5fzuzlw.png'
+      ,
+      integration: '1'
+    });
+    user.save(function (err, res) {
+        if (err) {
+            console.log("Error:" + err);
+        }
+        else {
+            console.log("Res:" + res);
+        }
+
+    });
 })
 
 app.use(router.routes(), router.allowedMethods())
