@@ -65,7 +65,8 @@
     "koa-jwt": "3.2.2",
     "bcryptjs": "2.4.3",
     "vue-axios": "2.0.2",
-    "mongoose": "4.10.4"
+    "mongoose": "4.10.4",
+    "bluebird": "3.5.0"
   },
   "engines": {
     "node": ">= 4.0.0",
