@@ -19,6 +19,7 @@ app.use(logger());
 
 
 app.use(user.routes(), user.allowedMethods())
+//app.use("/api",jwt({secret: 'blissful'}),user.routes())
 
 app.on('error', function(err, ctx){
     
