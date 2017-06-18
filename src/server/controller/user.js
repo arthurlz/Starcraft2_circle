@@ -85,16 +85,20 @@ router.post('/api/signup', async (ctx) => {
 })
 
 
-router.post('/api/auth', async (ctx) => {
-    let a = ctx.request.body;
+router.get('/api/auth', async (ctx) => {
     console.log('1231312');
-    console.log(a.token);
-    if(a.token) {
-        let user = jwt.verify(a.token, 'blissful');
-        ctx.body = user;
-    }else {
-        ctx.body = {};
+    console.log(ctx.headers);
+    let auths = ctx.headers.authorization;
+    if(auths) {
+        const token = auths.split(' ')[1];
+        if(token) {
+            let user = jwt.verify(token, 'blissful');
+            ctx.body = user;
+        }else {
+            ctx.body = {};
+        }
     }
+
 
 })
 

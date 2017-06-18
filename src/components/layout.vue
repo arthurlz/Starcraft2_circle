@@ -28,7 +28,10 @@
         <div class="layout-content">
             <Row >
                 <i-col span="17">
-                    <div class="layout-content-main">
+                   <keep-alive>
+                    <router-view></router-view>
+                  </keep-alive>
+                    <div class="layout-content-main" v-show="this.$route.path === '/'">
                         <Card>
                             <div class="segment">
                                 <div class="selected items">
@@ -54,7 +57,7 @@
                                                 <img class="ui avatar image" style="width: 3em;height: 3em;" src="http://res.cloudinary.com/hezf/image/upload/v1467186691/vwuj8a3tpuqoy5fzuzlw.png">
                                                 </a>
                                             </div>
-                                            <div class="" style="width: 60px; margin: 0px;padding: 0px">
+                                            <div>
                                                 <div class="content" style="font-size: smaller">9 天前</div>
                                             </div>
                                             </div>
@@ -88,7 +91,7 @@
                                                 <img class="ui avatar image" style="width: 3em;height: 3em;" src="http://res.cloudinary.com/hezf/image/upload/v1467186691/vwuj8a3tpuqoy5fzuzlw.png">
                                                 </a>
                                             </div>
-                                            <div class="" style="width: 60px; margin: 0px;padding: 0px">
+                                            <div>
                                                 <div class="content" style="font-size: smaller">9 天前</div>
                                             </div>
                                             </div>
@@ -100,33 +103,10 @@
                     </div>
                 </i-col>
                 <i-col span="6" offset="1" class="layout-line">
-                    <Menu active-name="1-2" width="auto" :open-names="['1']">
-                        <Submenu name="1">
-                            <template slot="title">
-                                <Icon type="ios-navigate"></Icon>
-                                导航一
-                            </template>
-                            <Menu-item name="1-1">选项 1</Menu-item>
-                            <Menu-item name="1-2">选项 2</Menu-item>
-                            <Menu-item name="1-3">选项 3</Menu-item>
-                        </Submenu>
-                        <Submenu name="2">
-                            <template slot="title">
-                                <Icon type="ios-keypad"></Icon>
-                                导航二
-                            </template>
-                            <Menu-item name="2-1">选项 1</Menu-item>
-                            <Menu-item name="2-2">选项 2</Menu-item>
-                        </Submenu>
-                        <Submenu name="3">
-                            <template slot="title">
-                                <Icon type="ios-analytics"></Icon>
-                                导航三
-                            </template>
-                            <Menu-item name="3-1">选项 1</Menu-item>
-                            <Menu-item name="3-2">选项 2</Menu-item>
-                        </Submenu>
-                    </Menu>
+                  <profile></profile>
+                  <topic></topic>
+                  <match></match>
+                  <!--<button @click="getmatch">get starcraft2 matches</button>-->
                 </i-col>
             </Row>
         </div>
@@ -141,15 +121,19 @@
 
 <script>
 // import MyModal from './dialog'
-//import jwt from 'koa-jwt'
-
+import Profile from './sidebars/profile'
+import Topic from './sidebars/topics'
+import Match from './sidebars/matches'
 export default {
      components : {
-        
+        Profile,
+        Topic,
+        Match
      },
     created(){
       const userInfo = this.getUserInfo();
       console.log(userInfo);
+      console.log(this.$route.path);
       // if(userInfo != null){
       //   this.id = userInfo.id;
       //   this.name = userInfo.name;
@@ -167,14 +151,6 @@ export default {
       }
     },
     methods : {
-        test () {
-            console.log(1212);
-            this.axios.get('/api/fuck').then((response) => {
-                console.log(response.data)
-            }, (err) => {
-                console.log(err)
-            })
-        },
         // changethat () {
         //     alert(1212);
         //     this.modal6 = !this.modal6;
@@ -186,18 +162,26 @@ export default {
         getUserInfo () {
           const token = sessionStorage.getItem('token');
           console.log(token);
-          this.axios.post('/api/auth',{token:token}).then((res) => {
-                console.log(res.data);
-                this.name = res.data.name;
-          }, (err) => {
-                console.log(err)
-          })
+          if(token) {
+            this.axios.get('/api/auth',{headers : {Authorization : 'Bearer ' + token}}).then((res) => {
+                  console.log(res.data);
+                  this.name = res.data.name;
+            }, (err) => {
+                  console.log(err)
+            })
+          }
         }
     }
 }
 </script>
 
 <style scoped>
+.header {
+  text-align:left;
+  font-weight: 700;
+  font-size: 1.28571429em;
+  color: rgba(0,0,0,.87);
+}
 .layout-copy{
     text-align: center;
     padding: 10px 0 20px;
@@ -220,44 +204,41 @@ export default {
     width: 420px;
     margin: 0 0 0 80%;
 }
-    .layout-assistant{
-        width: 300px;
-        margin: 0 auto;
-        height: inherit;
-    }
-    .layout-breadcrumb{
-        padding: 10px 15px 0;
-    }
-    .layout-content{
-        min-height: 200px;
-        margin: 15px;
-        overflow: hidden;
-        background: #fff;
-        border-radius: 4px;
-    }
-    .layout-content-main{
-        padding: 10px;
-    }
+.layout-assistant{
+    width: 300px;
+    margin: 0 auto;
+    height: inherit;
+}
+.layout-breadcrumb{
+    padding: 10px 15px 0;
+}
+.layout-content{
+    min-height: 200px;
+    margin: 15px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+}
+.layout-content-main{
+    padding: 10px;
+}
 
-    .layout-line {
-        border-left: thin solid rgb(153,154,29);
-    }
+.layout-line {
+    border-left: thin solid rgb(153,154,29);
+}
 
-    /*0604*/
-    .item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        margin-bottom : -50px;
-    }
-    img {
-        height : 60px;
-    }
-    .spacing {
-        margin-bottom : 50px;
-    }
-    .layout-content-main {
-        
-    }
+/*0604*/
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom : -50px;
+}
+img {
+    height : 60px;
+}
+.spacing {
+    margin-bottom : 50px;
+}
 </style>
