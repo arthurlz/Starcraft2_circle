@@ -6,6 +6,8 @@ import Signin from '@/components/signin'
 import Personal from '@/components/personal'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';    // 使用 CSS
+import Editor from '@/components/editor'
+
 Vue.use(iView)
 Vue.use(Router)
 
@@ -29,6 +31,10 @@ let router = new Router({
     {
       path: '/signin',
       component: Signin
+    },
+    {
+      path: '/new',
+      component: Editor    
     }
   ]
 })
