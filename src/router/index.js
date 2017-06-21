@@ -21,7 +21,11 @@ let router = new Router({
 				{
 					path: 'profile',
 					component: Personal
-				}
+				},
+        {
+          path: 'new',
+          component: Editor
+        }
 			]
     },
     {

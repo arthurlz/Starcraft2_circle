@@ -1,33 +1,33 @@
 <template>
     <div class="layout">
         <Menu mode="horizontal" theme="dark">
-            <div><a><img class="layout-logo" :src="imgPath"></img></a></div>
-            <div class="layout-nav">
-                <Menu-item name="1" v-show='!name'>
-                    <router-link :to="{path: '/signup'}">
-                        注册
-                    </router-link>
-                </Menu-item>
-                <Menu-item name="2" v-show='!name'>
-                    <router-link :to="{path: '/signin'}">
-                        登录
-                    </router-link>
-                </Menu-item>
-                <Menu-item name="2" v-show='name'>
-                     <router-link :to="{path: '/' + name}">
-                        {{name}}
-                    </router-link>
-                </Menu-item>
-                <Menu-item name="3">
-                    <router-link :to="{path: '/about'}">
-                        关于
-                    </router-link>
-                </Menu-item>
-            </div>
+          <div class="img-position"><a><img class="layout-logo" :src="imgPath"></img></a></div>
+          <div class="layout-nav">
+            <Menu-item name="1" v-show='!name' class="menu-align">
+                <router-link :to="{path: '/signup'}">
+                    注册
+                </router-link>
+            </Menu-item>
+            <Menu-item name="2" v-show='!name'>
+                <router-link :to="{path: '/signin'}">
+                    登录
+                </router-link>
+            </Menu-item>
+            <Menu-item name="2" v-show='name'>
+                <router-link :to="{path: '/' + name}">
+                    {{name}}
+                </router-link>
+            </Menu-item>
+            <Menu-item name="3">
+                <router-link :to="{path: '/new'}">
+                    关于
+                </router-link>
+            </Menu-item>
+          </div>
         </Menu>
         <div class="layout-content">
             <Row >
-                <i-col span="17">
+                <i-col span="14" offset="2">
                    <keep-alive>
                     <router-view></router-view>
                   </keep-alive>
@@ -102,7 +102,7 @@
                         </Card>
                     </div>
                 </i-col>
-                <i-col span="6" offset="1" class="layout-line">
+                <i-col span="5" offset="1" class="layout-line">
                   <profile></profile>
                   <topic></topic>
                   <match></match>
@@ -187,6 +187,9 @@ export default {
     padding: 10px 0 20px;
     color: #9ea7b4;
 }
+.img-position{
+  padding-left : 12%;
+}
 .layout{
     /*border: 1px solid #d7dde4;
     background: #f5f7f9;*/
@@ -201,8 +204,12 @@ export default {
     left: 20px;
 }
 .layout-nav{
-    width: 420px;
-    margin: 0 0 0 80%;
+    /*display: flex;
+    justify-content: flex-end;*/
+}
+ul{
+   display: grid;
+   grid-template-columns: 76% 24%;
 }
 .layout-assistant{
     width: 300px;
@@ -224,7 +231,7 @@ export default {
 }
 
 .layout-line {
-    border-left: thin solid rgb(153,154,29);
+    /*border-left: thin solid rgb(153,154,29);*/
 }
 
 /*0604*/
