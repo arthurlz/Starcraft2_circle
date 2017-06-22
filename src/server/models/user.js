@@ -1,6 +1,6 @@
 var mongoose = require('./db');
 
-var UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     name: {
       type : 'String',
       required : true

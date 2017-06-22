@@ -9,7 +9,7 @@
             <div class="outputHtml" v-html='markedToHtml'></div>
         </div>
         <div class="post-blog">
-            <Button type="primary" size="large"> 发布 </Button>
+            <Button type="primary" size="large" @click="postBlog"> 发布 </Button>
         </div>
     </div>
 </template>
@@ -71,7 +71,7 @@ export default {
 .outputHtml {
     background: #f0f5f5;
     margin: 0px 0px 0px 20px;
-    height: 526px;
+    height: 500px;
     overflow-y: auto;
     width: 45%;
     text-align: left;
@@ -85,5 +85,6 @@ export default {
 }
 .post-blog {
     text-align: left;
+    padding: 40px 0 0 6px;
 }
 </style>

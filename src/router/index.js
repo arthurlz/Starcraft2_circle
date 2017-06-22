@@ -7,6 +7,8 @@ import Personal from '@/components/personal'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';    // 使用 CSS
 import Editor from '@/components/editor'
+import Article from '@/components/blogs/article'
+import Reply from '@/components/blogs/reply'
 
 Vue.use(iView)
 Vue.use(Router)
@@ -25,6 +27,14 @@ let router = new Router({
         {
           path: 'new',
           component: Editor
+        },
+        {
+          path: 'article',
+          component: Article
+        },
+        {
+          path: '/reply',
+          component: Reply    
         }
 			]
     },
