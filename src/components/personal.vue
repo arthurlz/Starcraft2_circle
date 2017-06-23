@@ -52,7 +52,6 @@
     <Card>
       <div class="profile-outer">
           <h3>最近创建的话题</h3>
-          <!--<div class="basic-outer"><h3 class="basic-info">最近创建的话题</h3></div>-->
           <div class="profile-align">
               <div class="ui item">
                   <a href="/topic/2" style="font-weight: bold;"> Tests</a>

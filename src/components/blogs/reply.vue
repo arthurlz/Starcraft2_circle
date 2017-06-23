@@ -4,6 +4,7 @@
             <div class="reply-count">
                 2回复
             </div>
+
             <div class="divider"></div>
             <div class="comments">
                 <div class="comment">
@@ -12,71 +13,31 @@
                     </a>
                     <div class="content" id="1">
                         <a class="author" href="/user/lita">lita</a>
-                    <div class="metadata">
-                        <div class="date">1 个月前</div>
-                    </div>
-                    <div class="markdown-body">
-                        <p>you are gorgeous</p>
-                    </div>
-                    <div class="actions">
-                        <a class="upvote word-style" id="" alt="upvote">
-                            <Icon type="thumbsup"></Icon>
-                            <span id="supportNum1">0</span>
-                        </a>
-                        <a class="reply word-style" id="reply1">
-                            <Icon type="reply"></Icon>
-                        </a>
-                    </div>
-                 </div>
-              </div>
-                <div class="ui divider"></div>
-                <div class="comment">
-                    <a class="avatar" href="/user/lira">
-                    <img src="http://res.cloudinary.com/hezf/image/upload/v1467186691/vwuj8a3tpuqoy5fzuzlw.png">
-                    </a>
-                    <div class="content" id="2">
-                    <a class="author" href="/user/lira">lira</a>
-                    <div class="metadata">
-                        <div class="date">1 个月前</div>
-                    </div>
-                    <div class="markdown-body">
-                        <p>Yes , I supposed it did</p>
-                    </div>
-                    <div class="actions">
-                        <a id="support2">
-                        <i class="thumbs up icon button" title="点赞"></i>
-                        <span id="supportNum2">0</span>
-                        </a>
-                        <a id="reply2">
-                        <i class="reply icon" title="回复"></i>
-                        </a>
-                    </div>
-                    <div class="ui accordion" id="testContent2">
-                        <div class="title" style="display: none">
-                            不显示
+                        <div class="metadata">
+                            <div class="date">1 个月前</div>
                         </div>
-                        <div class="content">
-                            <div class="mditor fixed">
-                                <div class="head">
-                                <div class="toolbar"><i data-cmd="bold" class="fa fa-bold" title="粗体 shift+alt+b shift+alt+b"></i><i data-cmd="italic" class="fa fa-italic" title="斜体 shift+alt+i shift+alt+i"></i><i data-cmd="underline" class="fa fa-underline" title="下划线 shift+alt+e shift+alt+e"></i><i data-cmd="strikethrough" class="fa fa-strikethrough" title="删除线 shift+alt+d shift+alt+d"></i><i data-cmd="header" class="fa fa-header" title="标题 shift+alt+h shift+alt+h"></i><i data-cmd="quote" class="fa fa-quote-left" title="引用 shift+alt+q shift+alt+q"></i><i data-cmd="code" class="fa fa-code" title="代码 shift+alt+c shift+alt+c"></i><i data-cmd="list-ol" class="fa fa-list-ol" title="有序列表 shift+alt+o shift+alt+o"></i><i data-cmd="list-ul" class="fa fa-list-ul" title="无序列表 shift+alt+u shift+alt+u"></i><i data-cmd="link" class="fa fa-link" title="链接 shift+alt+l shift+alt+l"></i><i data-cmd="table" class="fa fa-table" title="表格 shift+alt+t shift+alt+t"></i><i data-cmd="line" class="fa fa-minus" title="分隔线 shift+alt+n shift+alt+n"></i><i data-cmd="image" class="fa fa-image" title="图片 shift+alt+p shift+alt+p"></i><i data-cmd="help" class="fa fa-question" title="帮助 shift+alt+/ shift+alt+/"></i></div>
-                                <div class="control"><i data-cmd="togglePreview" class="fa fa-columns" title="预览 shift+alt+v shift+alt+v"></i><i data-cmd="toggleFullScreen" class="fa fa-arrows-alt" title="全屏 shift+alt+f shift+alt+f"></i></div>
-                                </div>
-                                <div class="body">
-                                <textarea name="content" id="editor2" placeholder="请输入回复内容" class="editor" style="height: 200px;">@lira 
-                                        </textarea>
-                                <div class="viewer" style="height: 200px;"></div>
-                                </div>
-                                <div class="calc">
-                                <div class="editor" style="height: 200px;"><br></div>
-                                </div>
+                        <div class="markdown-body">
+                            <p>you are gorgeous</p>
+                        </div>
+                        <div class="actions">
+                            <a class="upvote word-style" id="" alt="upvote">
+                                <Icon type="thumbsup"></Icon>
+                                <span id="supportNum1">0</span>
+                            </a>
+                            <a class="reply word-style" id="reply1" @click="toggle()">
+                                <Icon type="reply"></Icon>
+                            </a>
+                        </div>
+                        <transition name="fold">
+                            <div class="reply-content" v-show="isReplyShow">
+                                <textarea name="content" id="editor1" placeholder="请输入回复内容" class="editor">@lita 
+                                </textarea>
                             </div>
-                            <button class="ui basic button" id="submitBtn2">回复</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="ui divider"></div>
-            </div>
+                        </transition>
+                     </div>
+                  </div>
+                  
+               </div>
         </Card>
     </div>
 </template>
@@ -87,9 +48,13 @@ export default {
      },
     data () {
       return {
+          isReplyShow: false
       }
     },
     methods : {
+        toggle () {
+            this.isReplyShow = !this.isReplyShow;
+        }
     },
     computed:{
   },
@@ -139,6 +104,7 @@ export default {
 }
 .content {
     margin-left: 3.5em;
+    max-width: 600px;
 }
 .author {
     font-size: 1em;
@@ -164,5 +130,37 @@ export default {
 .word-style {
     color: rgba(0,0,0,.4);
     font-size: .97em;
+}
+
+.reply-content {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    border: 1px solid #ccc;
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 0 4px 0 rgba(0,0,0,.1) inset;
+    background-color: #fff;
+    padding: .5em 0 1em;
+}
+.editor{
+    border-right: 1px solid #ddd!important;
+    border-bottom-right-radius: 0!important;
+    height: 200px;
+    position: relative;
+    display: inline-block;
+    border: none!important;
+    border-radius: 0 0 3px 3px!important;
+    outline: 0!important;
+    width: 100%;
+    /*height: 100%;*/
+    min-height: 60px;
+    resize: none!important;
+    background-color: transparent!important;
+    font: 16px/20px 'Helvetica Neue',Arial,'Liberation Sans',FreeSans,'Hiragino Sans GB',sans-serif!important;
+    margin: 0;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    text-align: left;
 }
 </style>
