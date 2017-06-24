@@ -37,7 +37,7 @@ router.post('/api/signup', async (ctx) => {
     //let ok = await bcrypt.compare(userInfo.password, res.password);
     console.log(res);
 
-    if(res) {
+    if(!res) {
         console.log(userInfo);
         let ok = await User.saveUser(userInfo);
         console.log(ok);
@@ -84,22 +84,38 @@ router.post('/api/signup', async (ctx) => {
     // });
 })
 
+router.get('/api/user/:userid', async (ctx) => {
+    //console.log(ctx.headers);
+    let userid= ctx.params.userid;
+    let auths = ctx.headers.authorization;
+    console.log(userid)
+    if(auths && userid) {
+        const token = auths.split(' ')[1];
+        if(token) {
+            let user = jwt.verify(token, 'blissful');
+            console.log(user)
+            let userInfo = await User.getOneUser(userid);
+            ctx.body = userInfo;
+        }else {
+            ctx.body = {};
+        }
+    }
+})
 
 router.get('/api/auth', async (ctx) => {
-    console.log('1231312');
-    console.log(ctx.headers);
+    //console.log(ctx.headers);
     let auths = ctx.headers.authorization;
     if(auths) {
         const token = auths.split(' ')[1];
         if(token) {
             let user = jwt.verify(token, 'blissful');
-            ctx.body = user;
+            console.log(user)
+            let userInfo = await User.getOneUser(user.name);
+            ctx.body = userInfo;
         }else {
             ctx.body = {};
         }
     }
-
-
 })
 
 router.post('/api/signin', async (ctx) => {
@@ -108,7 +124,8 @@ router.post('/api/signin', async (ctx) => {
     console.log(userInfo);
     if(userInfo) {
         let res = await User.getOneUser(userInfo.name);
-        if(res.password == userInfo.password) {
+        console.log(res.password)
+        if( bcrypt.compareSync(userInfo.password,res.password)) {
             const userToken = {
                 name: res.name
             }
@@ -126,6 +143,27 @@ router.post('/api/signin', async (ctx) => {
         ctx.body = {};
     }
 
+})
+
+
+router.post('/api/user/update', async (ctx) => {
+    let auths = ctx.headers.authorization;
+    if(auths) {
+        let userInfo = ctx.request.body;
+        console.log(userInfo)
+        const token = auths.split(' ')[1];
+        if(token) {
+            let user = jwt.verify(token, 'blissful');
+            console.log(user)
+            let result = await User.update({name:user.name},userInfo);
+            console.log(result);
+            ctx.body = {
+                result
+            };
+        }else {
+            ctx.body = {};
+        }
+    }
 })
 
 module.exports = router;

@@ -21,3 +21,7 @@ exports.saveUser = async (user) => {
     });
     return await UserEntity.save(user);
 }
+
+exports.update = async(conds, user) => {
+    return await User.update(conds, user);
+}

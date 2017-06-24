@@ -1,36 +1,43 @@
 <template>
     <div class="layout">
         <Menu mode="horizontal" theme="dark">
-          <div class="img-position"><a><img class="layout-logo" :src="imgPath"></img></a></div>
+          <div class="img-position"><a href="/"><img class="layout-logo" :src="imgPath"></img></a></div>
           <div class="layout-nav">
-            <Menu-item name="1" v-show='!name' class="menu-align">
+            <Menu-item name="1" v-show='Object.keys(userInfo).length === 0' class="menu-align">
                 <router-link :to="{path: '/signup'}">
                     注册
                 </router-link>
             </Menu-item>
-            <Menu-item name="2" v-show='!name'>
+            <Menu-item name="2" v-show='Object.keys(userInfo).length === 0'>
                 <router-link :to="{path: '/signin'}">
                     登录
                 </router-link>
             </Menu-item>
-            <Menu-item name="2" v-show='name'>
-                <router-link :to="{path: '/' + name}">
-                    {{name}}
+            <Menu-item name="2">
+              <template v-if="Object.keys(userInfo).length > 0">
+                <router-link :to="{name: 'profile', params: { userid: userInfo.name}}">
+                    {{userInfo.name}}
                 </router-link>
+               </template>
             </Menu-item>
             <Menu-item name="3">
                 <router-link :to="{path: '/new'}">
                     关于
                 </router-link>
             </Menu-item>
+            <Menu-item name="3" >
+                    <div @click="signOut()" v-if="Object.keys(userInfo).length > 0">退出</div>
+            </Menu-item>
           </div>
         </Menu>
         <div class="layout-content">
             <Row >
                 <i-col span="14" offset="2">
+                  <transition name = 'fade'>
                    <keep-alive>
                     <router-view></router-view>
                   </keep-alive>
+                  </transition>
                     <div class="layout-content-main" v-show="this.$route.path === '/'">
                         <Card>
                             <div class="segment">
@@ -103,9 +110,14 @@
                     </div>
                 </i-col>
                 <i-col span="5" offset="1" class="layout-line">
-                  <profile></profile>
+                 <template v-if="Object.keys(userInfo).length > 0">
+                  <profile :profile="userInfo"></profile>
                   <topic></topic>
-                  <match></match>
+                 </template>
+                  <div class="demo-spin-container" v-show="!userInfo">
+                     <Spin fix size="large"></Spin>
+                  </div>
+                    <match></match>
                   <!--<button @click="getmatch">get starcraft2 matches</button>-->
                 </i-col>
             </Row>
@@ -134,20 +146,12 @@ export default {
       const userInfo = this.getUserInfo();
       console.log(userInfo);
       console.log(this.$route.path);
-      // if(userInfo != null){
-      //   this.id = userInfo.id;
-      //   this.name = userInfo.name;
-      // }else{
-      //   this.id = '';
-      //   this.name = ''
-      // }
-      // this.getTodolist();
     },
      data () {
       return {
          //modal6: false,
          imgPath : require('../assets/logo.jpg'),
-         name : ''
+         userInfo : {}
       }
     },
     methods : {
@@ -165,11 +169,16 @@ export default {
           if(token) {
             this.axios.get('/api/auth',{headers : {Authorization : 'Bearer ' + token}}).then((res) => {
                   console.log(res.data);
-                  this.name = res.data.name;
+                  this.userInfo = res.data;
             }, (err) => {
                   console.log(err)
             })
           }
+        },
+        signOut () {
+            console.log(12120)
+            sessionStorage.clear();
+            location.reload()
         }
     }
 }

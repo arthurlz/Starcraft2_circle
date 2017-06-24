@@ -21,8 +21,10 @@ let router = new Router({
       component: Layout,
       children: [
 				{
-					path: 'profile',
-					component: Personal
+					path: 'profile/:userid',
+          name: 'profile',
+					component: Personal,
+          props: true//(route) => ({ userid: route.query.userid }) 
 				},
         {
           path: 'new',

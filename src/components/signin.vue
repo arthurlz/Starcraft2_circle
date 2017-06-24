@@ -6,10 +6,12 @@
                 <Input v-model="formCustom.name" placeholder="请输入姓名"></Input>
             </Form-item>
             <Form-item label="密码" prop="passwd">
-                <Input type="password" v-model="formCustom.passwd"></Input>
+                <div @keyup.enter="handleSubmit('formCustom')">
+                    <Input type="password" v-model="formCustom.passwd" ></Input>
+                </div>
             </Form-item>
             <Form-item>
-                <Button type="primary" @click="handleSubmit('formCustom')">登录</Button>
+                <Button type="primary" @click="handleSubmit('formCustom')" >登录</Button>
                 <Button type="ghost" @click="handleReset('formCustom')" style="margin-left: 8px">重置</Button>
             </Form-item>
         </Form>
@@ -61,14 +63,14 @@
                             if(res.data.success) {
                                 sessionStorage.setItem('token',res.data.token);
                                 console.log(res.data)
+                                this.$Message.success('登陆成功!');
                                 this.$router.push('/')
                             } else {
                                 this.$Message.error('用户不存在或者密码错误');
                             }                            
                         }, (err) => {
                             console.log(err)
-                        })
-                        this.$Message.success('提交成功!');
+                        })                       
                     } else {
                         this.$Message.error('表单验证失败!');
                     }

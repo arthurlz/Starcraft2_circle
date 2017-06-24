@@ -37,11 +37,11 @@ router.get('/api/getmatches', async (ctx) => {
                             //console.log(cheerio.load(img)('img').attr('src'));
                             leftImgRace = cheerio.load(img)('img').attr('src')
                             match.leftImgRace = leftImgRace;
-                            console.log(leftImgRace)
+                            //console.log(leftImgRace)
                         } else if(index == 1) {
                             leftImgNation = cheerio.load(img)('img').attr('src');
                             match.leftImgNation = leftImgNation;
-                            console.log(leftImgNation)
+                            //console.log(leftImgNation)
                         }
                     });
                     
@@ -54,11 +54,11 @@ router.get('/api/getmatches', async (ctx) => {
                         if(index == 0){
                             rightImgNation = cheerio.load(img)('img').attr('src');
                             match.rightImgNation = rightImgNation;
-                            console.log(rightImgNation)
+                            //console.log(rightImgNation)
                         } else if(index == 1) {
                             rightImgRace = cheerio.load(img)('img').attr('src');
                             match.rightImgRace = rightImgRace;
-                            console.log(rightImgRace)
+                            //console.log(rightImgRace)
                         }
                     });
 

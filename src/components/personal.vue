@@ -9,30 +9,30 @@
         </div>
         <div class="profile-content">
             <div class="profile-form">
-                <form class="ui form">
+                <form class="form">
                     <div class="field">
                         <label class="form-label">用户名</label>
-                        <input type="text" readonly="" value="lita">
+                        <input type="text" readonly="" v-model="userName">
                     </div>
                     <div class="field">
                         <label class="form-label">Email</label>
-                        <input type="text" readonly="" value="luneth929@gmail.com">
+                        <input type="text" v-model="userInfo.email">
                     </div>
                     <div class="field">
                         <label class="form-label">个性签名</label>
-                        <textarea readonly="" rows="2">I love you</textarea>
+                        <textarea rows="2" v-model="userInfo.signature"></textarea>
                     </div>
                     <div class="field">
                         <label class="form-label">个人网站</label>
-                        <input type="text" readonly="" value="">
+                        <input type="text" v-model="userInfo.personalWeb">
                     </div>
                     <div class="field">
                         <label class="form-label">GitHub</label>
-                        <input type="text" readonly="" value="Loveppears">
+                        <input type="text" v-model="userInfo.GitHub">
                     </div>
                     <div class="field">
                         <label class="form-label">积分</label>
-                        <input type="text" readonly="" value="12">
+                        <input type="text" readonly="" v-model="userInfo.integration">
                     </div>
                 </form>
             </div>
@@ -43,6 +43,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="submit-button" @click="submit">
+          <Button type="primary">修改信息</Button>
         </div>
     </div>
   </Card>
@@ -80,12 +83,63 @@
 
 <script>
 export default {
+  props : {
+      userid: {
+          type: String
+      }
+  },
   data () {
     return {
-      
+      userInfo: {},
+      userName: '',
+      email: '',
+      signature: '',
+      psite: '',
+      github: '',
+      points: ''
     }
   },
+  created () {
+    this.getUserInfo();
+  },
   methods : {
+    getUserInfo () {
+      const token = sessionStorage.getItem('token');
+      console.log(token);
+      if(token) {
+        console.log(this.$props.userid);
+        this.axios.get('/api/user/' + this.$props.userid,{headers : {Authorization : 'Bearer ' + token}}).
+          then((res)=>{
+                  console.log(res.data);
+                  this.userInfo = res.data;
+                  this.userName = this.userInfo.name;
+                  this.email = this.userInfo.email;
+                  this.signature = this.userInfo.signature;
+                  this.psite = this.userInfo.personalWeb;
+                  this.github = this.userInfo.GitHub;
+                  this.points = this.userInfo.integration;
+        }, (err) => {
+        })
+      }
+    },
+    submit () {
+        const token = sessionStorage.getItem('token');
+          if(token) {
+            this.axios.post('/api/user/update',this.userInfo,{headers : {Authorization : 'Bearer ' + token}}).
+              then((res)=>{
+                      console.log(res.data);
+                      this.userInfo = res.data;
+                      this.userName = this.userInfo.name;
+                      this.email = this.userInfo.email;
+                      this.signature = this.userInfo.signature;
+                      this.psite = this.userInfo.personalWeb;
+                      this.github = this.userInfo.GitHub;
+                      this.points = this.userInfo.integration;
+                      this.getUserInfo();
+              }, (err) => {
+            })
+        }
+      }
   }
 }
 </script>
@@ -102,7 +156,7 @@ export default {
     justify-content: flex-start;
 }
 .profile-form {
-  padding: 10px;
+  padding: 10px 10px 10px 0;
   width: 50%!important;
 }
 .form-label {
@@ -281,5 +335,12 @@ h3.ribbon:after {
     border-width: 0 0 10px 10px;
     border-left-color: #664d0f;
     right: 0;
+}
+
+.submit-button {
+    font-weight: 400;
+    border-radius: .28571429rem;
+    display: flex;
+
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+<div>
     <div class="layout-content">
     <Card>
             <div class="reply-count">
@@ -36,10 +37,19 @@
                         </transition>
                      </div>
                   </div>
-                  
                </div>
         </Card>
     </div>
+    <div class="layout-content">
+        <Card>
+            <h2 class="reply-title">添加回复</h2>
+            <div class="reply-content">
+                <textarea name="content" id="editor" placeholder="正文不能为空" class="editor" style="height: 200px;"></textarea>
+            </div>
+            <Button type="success">发布</Button>
+        </Card>
+    </div>
+</div>
 </template>
 
 <script>
@@ -133,7 +143,7 @@ export default {
 }
 
 .reply-content {
-    margin: 0;
+    margin: 0 0 10px 0;
     padding: 0;
     position: relative;
     border: 1px solid #ccc;
@@ -162,5 +172,8 @@ export default {
     word-break: break-all;
     word-wrap: break-word;
     text-align: left;
+}
+.reply-title {
+    padding-bottom: 15px;
 }
 </style>

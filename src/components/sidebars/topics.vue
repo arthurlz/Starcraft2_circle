@@ -9,7 +9,7 @@
                 <a class="item" href="/topic/1">Computed Properties and Watchers</a>
             </div>
         </div>
-        <a class="create-topic" href="/topic/create">
+        <a class="create-topic" href="//create">
             <div class="visible">
                 <Icon type="plus-round"></Icon>
                 发表话题
