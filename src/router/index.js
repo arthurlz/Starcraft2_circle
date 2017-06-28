@@ -27,12 +27,16 @@ let router = new Router({
           props: true//(route) => ({ userid: route.query.userid }) 
 				},
         {
-          path: 'new',
-          component: Editor
+          path: 'new/:userid',
+          name: 'peditor',
+          component: Editor,
+          props: true
         },
         {
           path: 'article',
-          component: Article
+          name: 'article',
+          component: Article,
+          props: true
         },
         {
           path: '/reply',

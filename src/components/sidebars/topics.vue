@@ -9,13 +9,14 @@
                 <a class="item" href="/topic/1">Computed Properties and Watchers</a>
             </div>
         </div>
-        <a class="create-topic" href="//create">
+        <template v-if="Object.keys(profile).length > 0">
+        <router-link :to="{name: 'peditor', params: { userid: profile.name}}" class="create-topic">
             <div class="visible">
                 <Icon type="plus-round"></Icon>
                 发表话题
             </div>
-        </a>
- 
+        </router-link>
+        </template>
     </Card>
 </div>
 </template>
@@ -23,12 +24,18 @@
 <script>
 
 export default {
-     components : {
+    props: {
+        profile: {
+            type: Object,
+            default: {}
+        }
+    },
+    components : {
         
-     },
+    },
     created(){
     },
-     data () {
+    data () {
       return {
       }
     },

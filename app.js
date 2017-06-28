@@ -14,6 +14,7 @@ const app = new Koa();
 
 const user = require('./src/server/controller/user');
 const match = require('./src/server/controller/match');
+const topic = require('./src/server/controller/topic');
 app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
@@ -22,6 +23,7 @@ app.use(logger());
 app.use(user.routes(), user.allowedMethods())
 //app.use("/api",jwt({secret: 'blissful'}),user.routes())
 app.use(match.routes(), match.allowedMethods())
+app.use(topic.routes(), topic.allowedMethods())
 app.on('error', function(err, ctx){
     
   console.log('server error', err);

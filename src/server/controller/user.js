@@ -166,4 +166,17 @@ router.post('/api/user/update', async (ctx) => {
     }
 })
 
+// const Topic = require('../service/topic');
+
+// router.post('/api/topic/post', async (ctx) => {
+//     let reqPost = ctx.request.body
+//     console.log(reqPost)
+//     var topic = {
+//         user_id: reqPost.user_id,
+//         title: reqPost.title,
+//         content: reqPost.content
+//     };
+//     let res = await Topic.postOneBlog(topic);
+//     console.log(res);
+// })
 module.exports = router;

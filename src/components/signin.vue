@@ -3,7 +3,7 @@
         <i-col span="8" push="8">
         <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
             <Form-item label="姓名" prop="name">
-                <Input v-model="formCustom.name" placeholder="请输入姓名"></Input>
+               <Input v-model="formCustom.name" placeholder="请输入姓名"></Input>
             </Form-item>
             <Form-item label="密码" prop="passwd">
                 <div @keyup.enter="handleSubmit('formCustom')">

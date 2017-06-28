@@ -1,11 +1,11 @@
 <template>
     <div class="layout-content">
-        <div class="header">
+       <div class="header">
             <label class="title">文章标题</label>
-            <Input v-model="value" placeholder="请输入..." style="width: 300px;padding-left: 50px"></Input>
+            <input v-model="title" placeholder="请输入..." @blur="checkTitle" class="input-title"></input>
         </div>
         <div class='editor'>
-            <textarea class="input-md" v-model='input' debounce='100'></textarea>
+            <textarea class="input-md" v-model='content' debounce='100'></textarea>
             <div class="outputHtml" v-html='markedToHtml'></div>
         </div>
         <div class="post-blog">
@@ -19,14 +19,41 @@ import marked from 'marked';
 import hlj from 'highlight.js'
 import 'highlight.js/styles/github-gist.css'
 export default {
+    props: {
+         userid: {
+            type: String
+        }
+    },
     components : {
      },
     data () {
       return {
-          input : ''
+          content : '',
+          title : ''
       }
     },
     methods : {
+        postBlog () {
+            const token = sessionStorage.getItem('token');
+            if(token) {
+                console.log(this.$props.userid)
+                this.axios.post('/api/topic/post',{user_id: this.$props.userid, title: this.title, content: this.content},
+                    {headers : {Authorization : 'Bearer ' + token}})
+                .then((res) => {
+                    if(res.data) {
+                        console.log(res.data);
+                        this.$router.push('/')
+                    }
+                }, (err) => {
+
+                });
+            }else {
+                this.$router.push('/')
+            }
+        },
+        checkTitle () {
+            
+        }
     },
     computed:{
         markedToHtml(){
@@ -36,7 +63,7 @@ export default {
                 }
             });
             // console.log(this.article.content);
-            return marked(this.input);
+            return marked(this.content);
         }
   },
 }
@@ -86,5 +113,11 @@ export default {
 .post-blog {
     text-align: left;
     padding: 40px 0 0 6px;
+}
+.input-title {
+    height:30px;
+    width: 300px;
+    margin-left: 50px;
+    /*border-radius: 3px;*/
 }
 </style>

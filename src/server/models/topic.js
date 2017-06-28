@@ -1,7 +1,7 @@
 'use strict';
 var mongoose = require('./db');
 
-const Topic = new mongoose.Schema({
+const TopicSchema = new mongoose.Schema({
   user_id: {
       type : String,
       required : true
@@ -41,4 +41,4 @@ const Topic = new mongoose.Schema({
 });
 
 
-module.exports = Topic;
+module.exports = mongoose.model('Topic',TopicSchema);

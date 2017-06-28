@@ -43,6 +43,8 @@
                             <div class="segment">
                                 <div class="selected items">
                                     <div class="item">
+                                        <!--<router-link :to="{name: 'profile', params: { profile:userInfo}}">
+                                        </router-link>-->
                                         <a href="/user/lita" class="ui spacing" style="width: 50px;">
                                         <img src="http://res.cloudinary.com/dwwn5mrou/image/upload/v1495804973/iwjvmrtwvbmddrslfncv.png">
                                         </a>
@@ -112,7 +114,7 @@
                 <i-col span="5" offset="1" class="layout-line">
                  <template v-if="Object.keys(userInfo).length > 0">
                   <profile :profile="userInfo"></profile>
-                  <topic></topic>
+                  <topic :profile="userInfo"></topic>
                  </template>
                   <div class="demo-spin-container" v-show="!userInfo">
                      <Spin fix size="large"></Spin>
@@ -155,14 +157,6 @@ export default {
       }
     },
     methods : {
-        // changethat () {
-        //     alert(1212);
-        //     this.modal6 = !this.modal6;
-        //     console.log(this.modal6);
-        // },
-        // closeDialog () {
-        //     this.modal6 = false;
-        // },
         getUserInfo () {
           const token = sessionStorage.getItem('token');
           console.log(token);
