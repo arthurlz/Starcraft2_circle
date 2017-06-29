@@ -50,7 +50,7 @@
                             v-model="show"
                             :width="300"
                             :height="300"
-                            url="/upload"
+                            url="/api/upload/avatar"
                             :params="params"
                             :headers="headers"
                             img-format="png"></my-upload>
@@ -240,7 +240,6 @@ input {
     margin: 0;
     outline: 0;
     -webkit-appearance: none;
-    tap-highlight-color: rgba(255,255,255,0);
     line-height: 1.2142em;
     padding: .67861429em 1em;
     font-size: 1em;
@@ -259,7 +258,6 @@ input:focus {
 textarea {
     margin: 0;
     -webkit-appearance: none;
-    tap-highlight-color: rgba(255,255,255,0);
     padding: .78571429em 1em;
     background: #FFF;
     border: 1px solid rgba(34,36,38,.15);

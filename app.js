@@ -16,6 +16,7 @@ const user = require('./src/server/controller/user');
 const match = require('./src/server/controller/match');
 const topic = require('./src/server/controller/topic');
 app.use(require('koa-bodyparser')());
+//app.use(require("koa-better-body")())
 app.use(json());
 app.use(logger());
 
