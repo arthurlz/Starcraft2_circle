@@ -43,6 +43,9 @@ import hlj from 'highlight.js'
 import 'highlight.js/styles/github-gist.css'
 import Reply from './reply'
 export default {
+    props:{
+        
+    },
     components : {
         Reply
      },

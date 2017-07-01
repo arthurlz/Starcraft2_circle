@@ -16,34 +16,34 @@
                     </div>
                     <div class="field">
                         <label class="form-label">Email</label>
-                        <input type="text" v-model="userInfo.email">
+                        <input type="text" v-model="email">
                     </div>
                     <div class="field">
                         <label class="form-label">个性签名</label>
-                        <textarea rows="2" v-model="userInfo.signature"></textarea>
+                        <textarea rows="2" v-model="signature"></textarea>
                     </div>
                     <div class="field">
                         <label class="form-label">个人网站</label>
-                        <input type="text" v-model="userInfo.personalWeb">
+                        <input type="text" v-model="psite">
                     </div>
                     <div class="field">
                         <label class="form-label">GitHub</label>
-                        <input type="text" v-model="userInfo.GitHub">
+                        <input type="text" v-model="github">
                     </div>
                     <div class="field">
                         <label class="form-label">积分</label>
-                        <input type="text" readonly="" v-model="userInfo.integration">
+                        <input type="text" readonly="" v-model="points">
                     </div>
                 </form>
             </div>
             <div class="profile-avatar">
                 <div class="ui grid">
                     <div class="centered row">
-                        <img class="ui image" src="http://res.cloudinary.com/dwwn5mrou/image/upload/v1495804973/iwjvmrtwvbmddrslfncv.png">
+                        <img class="ui image" :src="imgDataUrl">
                     </div>
                     <div class="">
                         <button @click="toggleShow">set avatar</button>
-                        <my-upload field="img"
+                        <my-upload field="img.png"
                             @crop-success="cropSuccess"
                             @crop-upload-success="cropUploadSuccess"
                             @crop-upload-fail="cropUploadFail"
@@ -54,7 +54,6 @@
                             :params="params"
                             :headers="headers"
                             img-format="png"></my-upload>
-                        <img :src="imgDataUrl">
                     </div>
                 </div>
             </div>
@@ -119,8 +118,7 @@ export default {
       psite: '',
       github: '',
       points: '',
-
-      show: true,
+      show: false,
       params: {
         //   token: '123456798',
         //   name: 'avatar'
@@ -128,7 +126,13 @@ export default {
       headers: {
           smail: '*_~'
       },
+      //field : name(),
 	  imgDataUrl: '' // the datebase64 url of created image
+    }
+  },
+  computed: {
+    name () {
+        return Math.random().toString().sub(3,10) + ".png"
     }
   },
   created () {
@@ -144,12 +148,12 @@ export default {
           then((res)=>{
                   console.log(res.data);
                   this.userInfo = res.data;
-                  this.userName = this.userInfo.name;
-                  this.email = this.userInfo.email;
-                  this.signature = this.userInfo.signature;
-                  this.psite = this.userInfo.personalWeb;
-                  this.github = this.userInfo.GitHub;
-                  this.points = this.userInfo.integration;
+                  this.userName = res.data.name;
+                  this.email = res.data.email;
+                  this.signature = res.data.signature;
+                  this.psite = res.data.personalWeb;
+                  this.github = res.dataGitHub;
+                  this.points = res.data.integration;
         }, (err) => {
         })
       }
@@ -173,41 +177,41 @@ export default {
         }
       },
 
-      	toggleShow() {
-				this.show = !this.show;
-			},
-            /**
-			 * crop success
-			 *
-			 * [param] imgDataUrl
-			 * [param] field
-			 */
-			cropSuccess(imgDataUrl, field){
-				console.log('-------- crop success --------');
-				this.imgDataUrl = imgDataUrl;
-			},
-			/**
-			 * upload success
-			 *
-			 * [param] jsonData   服务器返回数据，已进行json转码
-			 * [param] field
-			 */
-			cropUploadSuccess(jsonData, field){
-				console.log('-------- upload success --------');
-				console.log(jsonData);
-				console.log('field: ' + field);
-			},
-			/**
-			 * upload fail
-			 *
-			 * [param] status    server api return error status, like 500
-			 * [param] field
-			 */
-			cropUploadFail(status, field){
-				console.log('-------- upload fail --------');
-				console.log(status);
-				console.log('field: ' + field);
-			}
+    toggleShow() {
+            this.show = !this.show;
+    },
+    /**
+     * crop success
+     *
+     * [param] imgDataUrl
+     * [param] field
+     */
+    cropSuccess(imgDataUrl, field){
+        console.log('-------- crop success --------');
+        this.imgDataUrl = imgDataUrl;
+    },
+    /**
+     * upload success
+     *
+     * [param] jsonData   服务器返回数据，已进行json转码
+     * [param] field
+     */
+    cropUploadSuccess(jsonData, field){
+        console.log('-------- upload success --------');
+        console.log(jsonData);
+        console.log('field: ' + field);
+    },
+    /**
+     * upload fail
+     *
+     * [param] status    server api return error status, like 500
+     * [param] field
+     */
+    cropUploadFail(status, field){
+        console.log('-------- upload fail --------');
+        console.log(status);
+        console.log('field: ' + field);
+    }
   }
 }
 </script>
@@ -234,6 +238,9 @@ export default {
     font-size: .92857143em;
     font-weight: 700;
     text-align: left;
+}
+.image {
+    height: 150px;
 }
 input {
     font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;

@@ -3,11 +3,8 @@ const User = require('../service/user');
 const router = require('koa-router')();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const uploadCloud = require('cloudinary')
-const config = require('../config/cloudinary');
-uploadCloud.config(config)
-const parse = require('await-busboy')
-const asyncBusboy = require('async-busboy')
+const path = require('path');
+const upload = require('../common/upload')
 
 router.get('/api/fuck', async (ctx) => {
     ctx.body = 'hello guru'
@@ -64,29 +61,6 @@ router.post('/api/signup', async (ctx) => {
         }
 
     }
-    
-    // var user = new User({
-    //   name: 'lita',
-    //   password: 'lita',
-    //   email: 'lita@gmail.com',
-    //   gender: 'M',
-    //   signature: 'cool',
-    //   personalWeb: 'litacheng.me',
-    //   GitHub: 'loveppears',
-    //   avatarUrl: 
-    //       'http://res.cloudinary.com/hezf/image/upload/v1467186691/vwuj8a3tpuqoy5fzuzlw.png'
-    //   ,
-    //   integration: '1'
-    // });
-    // user.save(function (err, res) {
-    //     if (err) {
-    //         console.log("Error:" + err);
-    //     }
-    //     else {
-    //         console.log("Res:" + res);
-    //     }
-
-    // });
 })
 
 router.get('/api/user/:userid', async (ctx) => {
@@ -171,64 +145,15 @@ router.post('/api/user/update', async (ctx) => {
     }
 })
 
-// const Topic = require('../service/topic');
-
-// router.post('/api/topic/post', async (ctx) => {
-//     let reqPost = ctx.request.body
-//     console.log(reqPost)
-//     var topic = {
-//         user_id: reqPost.user_id,
-//         title: reqPost.title,
-//         content: reqPost.content
-//     };
-//     let res = await Topic.postOneBlog(topic);
-//     console.log(res);
-// })
-
- async function upload(path) {
-  return new Promise(function (resolve, reject) {
-    cloudinary.uploader.upload(path, function (result) {
-      console.log(result);
-      //异步删除下载的图片文件,这里假设不只有一个文件
-      fs.readdir('./uploads', (err, files)=> {
-        if (err) {
-          console.error(err);
-        }
-        for (let fileName of files) {
-          //删除除了说明文件的所有文件，也就是这里的图片缓存
-          if(fileName!=='readme.md'){
-            fs.unlink('./uploads/' + fileName, (err)=> {
-              if (err) {
-                console.error(err);
-              }
-            });
-          }
-        }
-      });
-
-      //传出上传结果
-      resolve(result);
-    });
-  });
-}
-
 router.post('/api/upload/avatar', async (ctx) => {
-    let img = ctx.request.body;
-    //console.log(ctx.request.body.files.file);
-    //console.log(ctx.request.is('multipart/*'));
-    const {files, fields} = await asyncBusboy(ctx.req);
-    console.log(files.path);
-    console.log(fields);
-    // const {fields} = await asyncBusboy(ctx.req, {
-    //     onFile: function(fieldname, file, filename, encoding, mimetype) {
-    //         console.log('File [' + fieldname + ']: filename: ' + filename + ', encoding: ' + encoding + ', mimetype: ' + mimetype);
-    //     }
-    // });
-    // if(img) {
-    //     console.log(ctx.body)
-    // }else {
-    //     ctx.body = {};
-    // }
-
+    let result = {};
+    let serverFilePath = path.join( __dirname, 'upload-files' )
+    result = await upload.uploadFile(ctx,{
+      fileType: 'album', // common or album
+      path: serverFilePath
+    });
+    ctx.body = {
+        result
+    }
 })
 module.exports = router;
