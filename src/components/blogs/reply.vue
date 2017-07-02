@@ -3,7 +3,7 @@
     <div class="layout-content">
     <Card>
             <div class="reply-count">
-                2回复
+                1回复
             </div>
 
             <div class="divider"></div>
@@ -31,7 +31,7 @@
                         </div>
                         <transition name="fold">
                             <div class="reply-content" v-show="isReplyShow">
-                                <textarea name="content" id="editor1" placeholder="请输入回复内容" class="editor">@lita 
+                                <textarea id="editor1" placeholder="请输入回复内容" class="editor">@lita 
                                 </textarea>
                             </div>
                         </transition>
@@ -44,9 +44,11 @@
         <Card>
             <h2 class="reply-title">添加回复</h2>
             <div class="reply-content">
-                <textarea name="content" id="editor" placeholder="正文不能为空" class="editor" style="height: 200px;"></textarea>
+                <textarea v-model='content' id="editor" placeholder="正文不能为空" class="editor"></textarea>
             </div>
-            <Button type="success">发布</Button>
+            <div @click="submitComment">
+                <Button type="success">发布</Button>
+            </div>
         </Card>
     </div>
 </div>
@@ -54,20 +56,42 @@
 
 <script>
 export default {
+    props : {
+        metaInfo : {
+            type: Object,
+            default: function () { return {} }
+        }
+    },
     components : {
-     },
+    },
     data () {
       return {
-          isReplyShow: false
+          isReplyShow: false,
+          content: ''
       }
     },
     methods : {
         toggle () {
             this.isReplyShow = !this.isReplyShow;
+        },
+        submitComment () {
+          const token = sessionStorage.getItem('token');
+          if(token) {
+            this.axios.post('/api/postReply/', {content: this.content,
+                                                topic_id: this.$props.metaInfo._id,
+                                                user_id: this.$props.metaInfo.curUser} 
+            ).then((res) => {
+                if(res.data._id) {
+                    
+                } else {
+
+                }
+            })
+          }
         }
     },
     computed:{
-  },
+    }
 }
 </script>
 

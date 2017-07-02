@@ -1,7 +1,9 @@
 <template>
     <div class="layout">
         <Menu mode="horizontal" theme="dark">
-          <div class="img-position"><a href="/"><img class="layout-logo" :src="imgPath"></img></a></div>
+          <div class="img-position">
+              <router-link :to="{path: '/'}"><img class="layout-logo" :src="imgPath"></img></router-link>
+          </div>
           <div class="layout-nav">
             <Menu-item name="1" v-show='Object.keys(userInfo).length === 0' class="menu-align">
                 <router-link :to="{path: '/signup'}">
@@ -34,40 +36,38 @@
             <Row >
                 <i-col span="14" offset="2">
                   <transition name = 'fade'>
-                   <keep-alive>
                     <router-view></router-view>
-                  </keep-alive>
                   </transition>
                     <div class="layout-content-main" v-show="this.$route.path === '/'">
+                    <template v-for="item in topics">
                         <Card>
                             <div class="segment">
                                 <div class="selected items">
                                     <div class="item">
-                                        <!--<router-link :to="{name: 'profile', params: { profile:userInfo}}">
-                                        </router-link>-->
-                                        <a href="/user/lita" class="ui spacing" style="width: 50px;">
-                                        <img src="http://res.cloudinary.com/dwwn5mrou/image/upload/v1495804973/iwjvmrtwvbmddrslfncv.png">
-                                        </a>
+                                        <router-link :to="{name: 'profile', params: { userid: item.user_id}}" class="spacing">
+                                            <img :src="item.avatarUrl">
+                                        </router-link>
                                         <div class="top content spacing">
-                                            <a class="header" href="/topic/1">Computed Properties and Watchers</a>
+                                            <router-link :to="{name: 'article', params: { user: item.user_id, uid: item._id}}" class="header">
+                                                {{item.title}}
+                                            </router-link>
                                             <div class="meta">
                                             <span class="cinema">
-                                                <a class="header" href="/user/1"></a>
-                                                发布于9 天前●
-                                                回复2●
-                                                浏览8
+                                                发布于{{convertTime(item.create_time)}} 天前●
+                                                回复{{item.reply_count}}●
+                                                浏览{{item.pv}}
                                             </span>
                                             </div>
                                         </div>
                                         <div class="middle spacing right floated">
                                             <div class="ui horizontal list">
                                             <div class="">
-                                                <a class="" href="/user/lira">
-                                                <img class="ui avatar image" style="width: 3em;height: 3em;" src="http://res.cloudinary.com/hezf/image/upload/v1467186691/vwuj8a3tpuqoy5fzuzlw.png">
-                                                </a>
+                                                 <router-link :to="{name: 'profile', params: { userid: item.user_id}}" class="spacing">
+                                                    <img :src="item.avatarUrl" class="ui avatar image" style="width: 3em;height: 3em;" >
+                                                </router-link>
                                             </div>
                                             <div>
-                                                <div class="content" style="font-size: smaller">9 天前</div>
+                                                <div class="content" style="font-size: smaller">{{convertTime(item.create_time)}} 天前</div>
                                             </div>
                                             </div>
                                         </div>
@@ -75,7 +75,8 @@
                                 </div>
                                 </div>
                         </Card>
-                         <Card>
+                        </template>
+                         <!--<Card>
                             <div class="segment">
                                 <div class="selected items">
                                     <div class="item">
@@ -108,7 +109,7 @@
                                     </div>
                                 </div>
                                 </div>
-                        </Card>
+                        </Card>-->
                     </div>
                 </i-col>
                 <i-col span="5" offset="1" class="layout-line">
@@ -120,7 +121,6 @@
                      <Spin fix size="large"></Spin>
                   </div>
                     <match></match>
-                  <!--<button @click="getmatch">get starcraft2 matches</button>-->
                 </i-col>
             </Row>
         </div>
@@ -138,6 +138,7 @@
 import Profile from './sidebars/profile'
 import Topic from './sidebars/topics'
 import Match from './sidebars/matches'
+import moment from 'moment'
 export default {
      components : {
         Profile,
@@ -153,17 +154,20 @@ export default {
       return {
          //modal6: false,
          imgPath : require('../assets/logo.jpg'),
-         userInfo : {}
+         userInfo : {},
+         topics : []
       }
+    },
+    computed:{
     },
     methods : {
         getUserInfo () {
           const token = sessionStorage.getItem('token');
-          console.log(token);
           if(token) {
             this.axios.get('/api/auth',{headers : {Authorization : 'Bearer ' + token}}).then((res) => {
                   console.log(res.data);
                   this.userInfo = res.data;
+                  this.getArticles();
             }, (err) => {
                   console.log(err)
             })
@@ -173,6 +177,26 @@ export default {
             console.log(12120)
             sessionStorage.clear();
             location.reload()
+        },
+        getArticles () {
+            const token = sessionStorage.getItem('token');
+            if(token) {
+                this.axios.get('/api/get_topics/', {headers : {Authorization : 'Bearer ' + token}})
+                .then((res) => {
+                    console.log(res.data);
+                    this.topics = res.data;
+                }, (err) => {
+                    console.log(err)
+                })
+            }
+        },
+        convertTime(postTime){
+            let dpostTime = new Date(postTime);
+            let mpostTime = moment(dpostTime);
+            let now = moment();
+            let dif = now.diff(mpostTime,'days');
+            console.log(dif);
+            return dif;
         }
     }
 }

@@ -4,7 +4,7 @@
         <div class="content">
            <template v-if="Object.keys(profile).length > 0">
             <router-link :to="{name: 'profile', params: { userid:profile.name}}">
-                <img class="avatar" src="http://res.cloudinary.com/dwwn5mrou/image/upload/v1495804973/iwjvmrtwvbmddrslfncv.png" id="userCardAvatar">
+                <img class="avatar" :src="profile.avatarUrl" id="userCardAvatar">
                 <div class="header" >
                     {{profile.name}}
                 </div>

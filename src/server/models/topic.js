@@ -1,7 +1,9 @@
 'use strict';
-var mongoose = require('./db');
+const mongoose = require('./db');
+const Schema   = mongoose.Schema;
 
 const TopicSchema = new mongoose.Schema({
+  //poster : { type: Schema.Types.ObjectId, ref: 'User' },
   user_id: {
       type : String,
       required : true
@@ -15,11 +17,13 @@ const TopicSchema = new mongoose.Schema({
   },
   pv: {
       type : Number,
-      required : false
+      required : false, //click counts
+      default : 0
   },
   reply_count: {
     type: Number,
-    required : false
+    required : false,
+    default : 0
   },
   allow_comment: {
     type: Number,
@@ -30,13 +34,18 @@ const TopicSchema = new mongoose.Schema({
     required : false
   },
   last_reply_id: {
-    type: Number,
+    type: String,
     required: false
   }
   ,
   last_reply_date_time: {
     type: Date,
     required: false
+  },
+  create_time: {
+    type: Date,
+    required: false,
+    default: Date.now
   }
 });
 

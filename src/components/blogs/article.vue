@@ -3,37 +3,33 @@
     <div class="layout-content">
     <Card>
         <div class="article-content">
-            <h1 class="header">Computed Properties and Watchers</h1>
+            <h1 class="header">{{topics.title}}</h1>
             <div class="item side-info">
-                •发布于1 个月前•作者 lita•11次浏览
+                •发布于1 个月前•作者 {{topics.user_id}}•{{topics.pv}}次浏览
             </div>
             <div class="">
+                <template v-if="topics.user_id === this.curUser">
                 <div class="buttons">
-                <a class="edit-topic" id="editTopic" href="/topic/1/edit">
-                    <Icon type="edit"></Icon>编辑
-                </a>
-                <div class="delete-button">
-                    <a class="edit-topic" href="/topic/1/delete">
-                        <Icon type="trash-a"></Icon>删除
+                    <a class="edit-topic" id="editTopic" href="/topic/1/edit">
+                        <Icon type="edit"></Icon>编辑
                     </a>
+                    <div class="delete-button">
+                        <a class="edit-topic" href="/topic/1/delete">
+                            <Icon type="trash-a"></Icon>删除
+                        </a>
+                    </div>
                 </div>
-                </div>
+                </template>
             </div>
             <div class="divider"></div>
-            <div class="markdown-body">
-                <p>In-template expressions are very convenient, but they are really only meant for simple operations. Putting too much logic into your templates can make them bloated and hard to maintain. For example:</p>
-                <p></p>
-                <div>
-                message.split('').reverse().join('') 
-                </div>
-                At this point, the template is no longer simple and declarative. You have to look at it for a second before realizing that it displays message in reverse. The problem is made worse when you want to include the reversed message in your template more than once.
-                That’s why for any complex logic, you should use a computed property.
-                <p></p>
-            </div>
+            <template v-if="topics.content">
+                <div class="markdown-body"  v-html="markedToHtml"></div>
+            </template>
+            
         </div>
     </Card>
     </div>
-    <reply></reply>
+    <reply :metaInfo="{curUser,_id: this.topics._id}"></reply>
 </div>
 </template>
 
@@ -44,17 +40,59 @@ import 'highlight.js/styles/github-gist.css'
 import Reply from './reply'
 export default {
     props:{
-        
+      user: {
+          type: String
+      },
+      uid: {
+          type: String
+      }
     },
     components : {
         Reply
      },
+    created () {
+        this.updatePV()
+        this.getCurUser();
+        this.getTopics();
+    },
     data () {
       return {
-          input : ''
+          input : '',
+          curUser: '',
+          topics: {}
       }
     },
     methods : {
+        updatePV() {
+          const token = sessionStorage.getItem('token');
+          if(token) {
+            this.axios.put('/api/updatePV/' + this.$props.user + '/' + this.$props.uid,
+             {headers : {Authorization : 'Bearer ' + token}}).then((res) => {
+                res.data
+            })
+          }
+        },
+        getCurUser() {
+          const token = sessionStorage.getItem('token');
+          if(token) {
+            this.axios.get('/api/get_cur_user',
+             {headers : {Authorization : 'Bearer ' + token}}).then((res) => {
+                this.curUser = res.data.name
+            })
+          }
+        },
+        getTopics() {
+          const token = sessionStorage.getItem('token');
+          if(token) {
+            this.axios.get('/api/' + this.$props.user + '/topic/' + this.$props.uid,
+                {headers : {Authorization : 'Bearer ' + token}}).then((res) => {
+                  console.log(res.data)
+                  this.topics = res.data;
+            }, (err) => {
+                  console.log(err)
+            })
+          }
+        }
     },
     computed:{
         markedToHtml(){
@@ -64,7 +102,7 @@ export default {
                 }
             });
             // console.log(this.article.content);
-            return marked(this.input);
+            return marked(this.topics.content);
         }
   },
 }

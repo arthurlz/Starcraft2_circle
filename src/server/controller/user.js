@@ -147,13 +147,26 @@ router.post('/api/user/update', async (ctx) => {
 
 router.post('/api/upload/avatar', async (ctx) => {
     let result = {};
-    let serverFilePath = path.join( __dirname, 'upload-files' )
+    let serverFilePath = path.join( __dirname, '../','upload-files' )
     result = await upload.uploadFile(ctx,{
       fileType: 'album', // common or album
       path: serverFilePath
     });
     ctx.body = {
         result
+    }
+})
+
+router.get('/api/get_cur_user', async (ctx) => {
+    let auths = ctx.headers.authorization;
+    if(auths) {
+        const token = auths.split(' ')[1];
+        if(token) {
+            let user = jwt.verify(token, 'blissful');
+            ctx.body = user;
+        }else {
+            ctx.body = {};
+        }
     }
 })
 module.exports = router;

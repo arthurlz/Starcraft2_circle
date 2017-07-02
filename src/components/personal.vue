@@ -42,7 +42,7 @@
                         <img class="ui image" :src="imgDataUrl">
                     </div>
                     <div class="">
-                        <button @click="toggleShow">set avatar</button>
+                        <button class="button-avatar" @click="toggleShow">set avatar</button>
                         <my-upload field="img.png"
                             @crop-success="cropSuccess"
                             @crop-upload-success="cropUploadSuccess"
@@ -59,7 +59,7 @@
             </div>
         
         </div>
-        <div class="submit-button" @click="submit">
+        <div class="submit-button" @click="updateInfo">
           <Button type="primary">修改信息</Button>
         </div>
     </div>
@@ -141,12 +141,12 @@ export default {
   methods : {
     getUserInfo () {
       const token = sessionStorage.getItem('token');
-      console.log(token);
+      //console.log(token);
       if(token) {
         console.log(this.$props.userid);
         this.axios.get('/api/user/' + this.$props.userid,{headers : {Authorization : 'Bearer ' + token}}).
           then((res)=>{
-                  console.log(res.data);
+                  //console.log(res.data);
                   this.userInfo = res.data;
                   this.userName = res.data.name;
                   this.email = res.data.email;
@@ -154,16 +154,17 @@ export default {
                   this.psite = res.data.personalWeb;
                   this.github = res.dataGitHub;
                   this.points = res.data.integration;
+                  this.imgDataUrl = res.data.avatarUrl;
         }, (err) => {
         })
       }
     },
-    submit () {
+    updateInfo () {
         const token = sessionStorage.getItem('token');
           if(token) {
             this.axios.post('/api/user/update',this.userInfo,{headers : {Authorization : 'Bearer ' + token}}).
               then((res)=>{
-                      console.log(res.data);
+                      //console.log(res.data);
                       this.userInfo = res.data;
                       this.userName = this.userInfo.name;
                       this.email = this.userInfo.email;
@@ -187,8 +188,8 @@ export default {
      * [param] field
      */
     cropSuccess(imgDataUrl, field){
-        console.log('-------- crop success --------');
-        this.imgDataUrl = imgDataUrl;
+        //console.log('-------- crop success --------');
+        //this.imgDataUrl = imgDataUrl;
     },
     /**
      * upload success
@@ -197,9 +198,13 @@ export default {
      * [param] field
      */
     cropUploadSuccess(jsonData, field){
-        console.log('-------- upload success --------');
-        console.log(jsonData);
-        console.log('field: ' + field);
+        //console.log('-------- upload success --------');
+        //console.log(jsonData);
+        this.imgDataUrl = jsonData.result.cloudinary.url
+        this.userInfo.avatarUrl = this.imgDataUrl;
+        //console.log('field: ' + field);
+        this.show = !this.show;
+        this.updateInfo();
     },
     /**
      * upload fail
@@ -208,9 +213,9 @@ export default {
      * [param] field
      */
     cropUploadFail(status, field){
-        console.log('-------- upload fail --------');
-        console.log(status);
-        console.log('field: ' + field);
+        // console.log('-------- upload fail --------');
+        // console.log(status);
+        // console.log('field: ' + field);
     }
   }
 }
@@ -415,5 +420,18 @@ h3.ribbon:after {
     border-radius: .28571429rem;
     display: flex;
 
+}
+
+.button-avatar {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background: rgb(66, 184, 221); /* this is a light blue */
+    margin-left : 24px;
+    margin-top : 10px;
+}
+
+.button-avatar:hover {
+    background: rgb(21, 100, 125);
 }
 </style>

@@ -1,16 +1,17 @@
-const Topic = require('../models/topic')
+const Reply = require('../models/reply')
 const User = require('./user');
-const bcrypt = require('bcryptjs');
 
-exports.postOneBlog = async(topic) => {
-    if(!topic) {
+exports.postReply = async(reply) => {
+    if(!reply) {
         return {};
     }
-    let {user_id,title,content} = topic;
-    let topicEntity = new Topic({user_id, title, content});
-    return await topicEntity.save(topic);
+    let {user_id,topic_id,content} = reply;
+    let replyEntity = new Reply({user_id,topic_id,content});
+    return await replyEntity.save(reply);
 }
 
+
+//not yet
 exports.getTopics = async () => {
     // if(!userid)  {
     //     return {};

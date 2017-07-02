@@ -33,7 +33,7 @@ let router = new Router({
           props: true
         },
         {
-          path: 'article',
+          path: 'article/:user/:uid',
           name: 'article',
           component: Article,
           props: true

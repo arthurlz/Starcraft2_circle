@@ -15,6 +15,7 @@ const app = new Koa();
 const user = require('./src/server/controller/user');
 const match = require('./src/server/controller/match');
 const topic = require('./src/server/controller/topic');
+const reply = require('./src/server/controller/reply');
 app.use(require('koa-bodyparser')());
 //app.use(require("koa-better-body")())
 app.use(json());
@@ -25,6 +26,7 @@ app.use(user.routes(), user.allowedMethods())
 //app.use("/api",jwt({secret: 'blissful'}),user.routes())
 app.use(match.routes(), match.allowedMethods())
 app.use(topic.routes(), topic.allowedMethods())
+app.use(reply.routes(), reply.allowedMethods())
 app.on('error', function(err, ctx){
     
   console.log('server error', err);

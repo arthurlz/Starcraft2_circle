@@ -25,3 +25,5 @@ exports.saveUser = async (user) => {
 exports.update = async(conds, user) => {
     return await User.update(conds, user);
 }
+
+exports.UserSchema = User
