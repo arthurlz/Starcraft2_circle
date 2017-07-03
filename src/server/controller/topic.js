@@ -71,4 +71,21 @@ router.put('/api/updatePV/:userid/:uid', async (ctx) => {
         }
     }
 })
+
+router.get('/api/getTopicTitles/:userid', async (ctx) => {
+    let userid= ctx.params.userid;
+    let auths = ctx.headers.authorization;
+    if(auths && userid) {
+        const token = auths.split(' ')[1];
+        if(token) {
+            console.log('this is put')
+            let titles = await Topic.getTitles(userid);
+            console.log(titles);
+            ctx.body = titles
+        }else {
+            ctx.body = {};
+        }
+    }
+})
+
 module.exports = router;

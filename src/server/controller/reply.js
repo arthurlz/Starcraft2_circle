@@ -17,4 +17,17 @@ router.post('/api/postReply/', async (ctx) => {
     }
 })
 
+router.get('/api/getReplies/:cid', async (ctx) => {
+    let cid = ctx.params.cid;
+    let auths = ctx.headers.authorization;
+    if(auths && cid) {
+        const token = auths.split(' ')[1];
+        if(token) {
+            let replies = await Reply.getReplies(cid);
+            ctx.body = replies;
+        }else {
+            ctx.body = {};
+        }
+    }
+})
 module.exports = router;

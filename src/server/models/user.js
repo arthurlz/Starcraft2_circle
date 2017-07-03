@@ -16,7 +16,8 @@ const UserSchema = new mongoose.Schema({
       type: 'String'
     },
     signature: {
-      type: 'String'
+      type: 'String',
+      default: ''
     },
     personalWeb: {
       type: 'String'
