@@ -29,7 +29,7 @@
         </div>
     </Card>
     </div>
-    <reply :metaInfo="{curUser,_id: this.topics._id}"></reply>
+    <reply :metaInfo="{curUser,_id: this.topics._id}" :replies="this.replies" @postComment="refresh"></reply>
 </div>
 </template>
 
@@ -59,7 +59,8 @@ export default {
       return {
           input : '',
           curUser: '',
-          topics: {}
+          topics: {},
+          replies: []
       }
     },
     methods : {
@@ -88,10 +89,19 @@ export default {
                 {headers : {Authorization : 'Bearer ' + token}}).then((res) => {
                   console.log(res.data)
                   this.topics = res.data;
+                  return this.axios.get('/api/getReplies/' + this.$props.uid,
+                        {headers : {Authorization : 'Bearer ' + token}}).then((res) => {
+                            console.log(res.data)
+                            this.replies = res.data
+                        })
             }, (err) => {
                   console.log(err)
             })
           }
+        },
+        refresh () {
+            console.log("event caller")
+            this.getTopics();
         }
     },
     computed:{

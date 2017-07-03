@@ -76,46 +76,12 @@
                                 </div>
                         </Card>
                         </template>
-                         <!--<Card>
-                            <div class="segment">
-                                <div class="selected items">
-                                    <div class="item">
-                                        <a href="/user/lita" class="ui spacing" style="width: 50px;">
-                                        <img src="http://res.cloudinary.com/dwwn5mrou/image/upload/v1495804973/iwjvmrtwvbmddrslfncv.png">
-                                        </a>
-                                        <div class="top content spacing">
-                                            <a class="header" href="/topic/1">Computed Properties and Watchers</a>
-                                            <div class="meta">
-                                            <span class="cinema">
-                                                <a class="header" href="/user/1"></a>
-                                                发布于9 天前●
-                                                回复2●
-                                                浏览8
-                                            </span>
-                                            </div>
-                                        </div>
-                                        <div class="middle spacing right floated">
-                                            <div class="ui horizontal list">
-                                            <div class="">
-                                                <a class="" href="/user/lira">
-                                                <img class="ui avatar image" style="width: 3em;height: 3em;" src="http://res.cloudinary.com/hezf/image/upload/v1467186691/vwuj8a3tpuqoy5fzuzlw.png">
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <div class="content" style="font-size: smaller">9 天前</div>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                        </Card>-->
                     </div>
                 </i-col>
                 <i-col span="5" offset="1" class="layout-line">
                  <template v-if="Object.keys(userInfo).length > 0">
                   <profile :profile="userInfo"></profile>
-                  <topic :profile="userInfo"></topic>
+                  <topic :profile="userInfo" :titles="titles" @article="toggleArticle"></topic>
                  </template>
                   <div class="demo-spin-container" v-show="!userInfo">
                      <Spin fix size="large"></Spin>
@@ -124,9 +90,6 @@
                 </i-col>
             </Row>
         </div>
-        <!--
-        <my-modal :pmodal6="modal6" @closeD='closeDialog'></my-modal>
-        -->
         <div class="layout-copy">
           2011-2017 &copy; Brain-fucking
         </div>
@@ -134,7 +97,6 @@
 </template>
 
 <script>
-// import MyModal from './dialog'
 import Profile from './sidebars/profile'
 import Topic from './sidebars/topics'
 import Match from './sidebars/matches'
@@ -146,16 +108,14 @@ export default {
         Match
      },
     created(){
-      const userInfo = this.getUserInfo();
-      console.log(userInfo);
-      console.log(this.$route.path);
+      this.getUserInfo();
     },
      data () {
       return {
-         //modal6: false,
          imgPath : require('../assets/logo.jpg'),
          userInfo : {},
-         topics : []
+         topics : [],
+         titles : []
       }
     },
     computed:{
@@ -168,6 +128,11 @@ export default {
                   console.log(res.data);
                   this.userInfo = res.data;
                   this.getArticles();
+                  return this.axios.get('/api/getTopicTitles/' + this.userInfo.name,{headers : {Authorization : 'Bearer ' + token}})
+                                    .then((res) => {
+                                        console.log(res.data)
+                                        this.titles = res.data;
+                                    });
             }, (err) => {
                   console.log(err)
             })
@@ -197,6 +162,9 @@ export default {
             let dif = now.diff(mpostTime,'days');
             console.log(dif);
             return dif;
+        },
+        toggleArticle (route) {
+            this.$router.go(route)
         }
     }
 }

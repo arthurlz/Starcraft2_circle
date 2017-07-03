@@ -39,3 +39,8 @@ exports.updatePV = async(user, _id) => {
     let topics = await Topic.update({user_id: user, _id},{$inc: { pv: 1 }});
     return topics;
 }
+
+exports.getTitles = async(userid) => {
+    let titles = await Topic.find({user_id: userid}, ['title']).lean();
+    return titles;
+}

@@ -5,8 +5,13 @@
             <div class="header">你的话题</div>
             <div class="divider"></div>
             <div class="linklists" id="user_card_list">
-                <a class="item" href="/topic/2">Tests</a>
-                <a class="item" href="/topic/1">Computed Properties and Watchers</a>
+                <template v-for="title in this.$props.titles">
+                    <router-link :to="{name: 'article', params: { user:profile.name, uid:title._id}}" class="item">
+                        {{title.title}}
+                    </router-link>
+                </template>
+                <!--<a class="item" href="/topic/2">Tests</a>
+                <a class="item" href="/topic/1">Computed Properties and Watchers</a>-->
             </div>
         </div>
         <template v-if="Object.keys(profile).length > 0">
@@ -28,7 +33,14 @@ export default {
         profile: {
             type: Object,
             default: {}
+        },
+        titles: {
+            tyep: Array,
+            default: function() { return [] }
         }
+    },
+    watch:{
+      '$route':'fetchData'
     },
     components : {
         
@@ -40,6 +52,12 @@ export default {
       }
     },
     methods : {
+        fetchData() {
+            //this.$router.push(this.$route.path)
+            this.$emit('article', this.$route.path)
+            //console.log(this.$route.path)
+            console.log(12121212)
+        }
     }
 }
 </script>

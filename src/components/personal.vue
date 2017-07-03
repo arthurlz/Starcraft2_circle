@@ -162,16 +162,16 @@ export default {
     updateInfo () {
         const token = sessionStorage.getItem('token');
           if(token) {
+            this.userInfo.name = this.userName;
+            this.userInfo.email = this.email;
+            this.userInfo.signature = this.signature;
+            this.userInfo.personalWeb = this.psite;
+            this.userInfo.GitHub = this.github;
+            this.userInfo.integration = this.points;
             this.axios.post('/api/user/update',this.userInfo,{headers : {Authorization : 'Bearer ' + token}}).
               then((res)=>{
                       //console.log(res.data);
-                      this.userInfo = res.data;
-                      this.userName = this.userInfo.name;
-                      this.email = this.userInfo.email;
-                      this.signature = this.userInfo.signature;
-                      this.psite = this.userInfo.personalWeb;
-                      this.github = this.userInfo.GitHub;
-                      this.points = this.userInfo.integration;
+                      //this.userInfo = res.data;
                       this.getUserInfo();
               }, (err) => {
             })

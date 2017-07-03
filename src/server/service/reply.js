@@ -10,30 +10,19 @@ exports.postReply = async(reply) => {
     return await replyEntity.save(reply);
 }
 
-
-//not yet
-exports.getTopics = async () => {
-    // if(!userid)  {
-    //     return {};
-    // }
+exports.getReplies = async (cid) => {
     let users = await User.UserSchema.find({}, ['name','avatarUrl']);
-    //console.log(users);
-    let topics = await Topic.find({}).sort({ create_time: -1 }).lean();
-    let newTopics = topics;
-    topics.forEach((e,i,a) => {
+    let replies = await Reply.find({topic_id: cid}).sort({ create_time: 1 }).lean();
+    let newReplies = replies;
+    newReplies.forEach((e,i,a) => {
         let union = users.filter((ue,ui,ua) => {
             return ue.name === e.user_id;
         })
-        console.log(union[0].avatarUrl);
-        newTopics[i].avatarUrl = union[0].avatarUrl;
+        newReplies[i].avatarUrl = union[0].avatarUrl;
     });
-    console.log(newTopics);
-    return newTopics;
-}
-
-exports.getUserTopic = async(user, _id) => {
-    let topics = await Topic.find({user_id: user, _id}).lean();
-    return topics;
+    console.log('asdghaodhasodoa')
+    console.log(newReplies);
+    return newReplies;  
 }
 
 exports.updatePV = async(user, _id) => {

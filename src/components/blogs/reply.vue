@@ -3,27 +3,28 @@
     <div class="layout-content">
     <Card>
             <div class="reply-count">
-                1回复
+                {{this.$props.replies.length}}回复
             </div>
-
+            <template v-for="reply in this.$props.replies">
             <div class="divider"></div>
             <div class="comments">
                 <div class="comment">
-                    <a class="avatar" href="/user/lita">
-                        <img class="avatar" src="http://res.cloudinary.com/dwwn5mrou/image/upload/v1495804973/iwjvmrtwvbmddrslfncv.png">
-                    </a>
+                    <router-link :to="{name: 'profile', params: { userid: reply.user_id}}" class="avatar">
+                        <img class="avatar" :src="reply.avatarUrl">
+                    </router-link>
                     <div class="content" id="1">
-                        <a class="author" href="/user/lita">lita</a>
+                        <router-link :to="{name: 'profile', params: { userid: reply.user_id}}" class="author">
+                             {{reply.user_id}}
+                        </router-link>
                         <div class="metadata">
                             <div class="date">1 个月前</div>
                         </div>
-                        <div class="markdown-body">
-                            <p>you are gorgeous</p>
+                        <div class="markdown-body" v-html="markedToHtml(reply.content)">
                         </div>
                         <div class="actions">
                             <a class="upvote word-style" id="" alt="upvote">
                                 <Icon type="thumbsup"></Icon>
-                                <span id="supportNum1">0</span>
+                                <span id="supportNum1">{{reply.support}}</span>
                             </a>
                             <a class="reply word-style" id="reply1" @click="toggle()">
                                 <Icon type="reply"></Icon>
@@ -38,6 +39,7 @@
                      </div>
                   </div>
                </div>
+               </template>
         </Card>
     </div>
     <div class="layout-content">
@@ -55,14 +57,22 @@
 </template>
 
 <script>
+import marked from 'marked';
+import hlj from 'highlight.js'
+import 'highlight.js/styles/github-gist.css'
+
 export default {
     props : {
         metaInfo : {
             type: Object,
             default: function () { return {} }
+        },
+        replies : {
+            type: Array,
+            default: function () { return [] }
         }
     },
-    components : {
+    created () {
     },
     data () {
       return {
@@ -81,13 +91,21 @@ export default {
                                                 topic_id: this.$props.metaInfo._id,
                                                 user_id: this.$props.metaInfo.curUser} 
             ).then((res) => {
-                if(res.data._id) {
-                    
+                if(res.data.ok) {
+                    this.$emit('postComment')
                 } else {
 
                 }
             })
           }
+        },
+        markedToHtml(content){
+            marked.setOptions({
+                highlight: function (code) {
+                    return hlj.highlightAuto(code).value;
+                }
+            });
+            return marked(content);
         }
     },
     computed:{
