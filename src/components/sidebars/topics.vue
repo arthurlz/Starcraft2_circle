@@ -36,7 +36,7 @@ export default {
         },
         titles: {
             tyep: Array,
-            default: function() { return [] }
+            default: () => []
         }
     },
     watch:{

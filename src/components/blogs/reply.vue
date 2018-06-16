@@ -65,11 +65,11 @@ export default {
     props : {
         metaInfo : {
             type: Object,
-            default: function () { return {} }
+            default: ()=> {}
         },
         replies : {
             type: Array,
-            default: function () { return [] }
+            default: ()=> []
         }
     },
     created () {

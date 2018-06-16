@@ -40,7 +40,7 @@ export default {
     props : {
         profile: {
             type: Object,
-            default: {}
+            default: () => {}
         }
     },
     components : {

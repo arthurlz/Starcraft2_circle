@@ -127,7 +127,8 @@ export default {
           smail: '*_~'
       },
       //field : name(),
-	  imgDataUrl: '' // the datebase64 url of created image
+	  imgDataUrl: '', // the datebase64 url of created image,
+      curUser: ''
     }
   },
   computed: {
